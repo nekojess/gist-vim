@@ -30,7 +30,12 @@ if globpath(&rtp, 'autoload/webapi/http.vim') ==# ''
   finish
 endif
 
-let s:gist_token_file = expand(get(g:, 'gist_token_file', '~/.gist-vim'))
+let s:gist_token_file = get(g:, 'gist_token_file', $GISTVIM_TOKEN_FILE)
+if strlen(s:gist_token_file) == 0
+  let s:gist_token_file = '~/.gist-vim'
+endif
+let s:gist_token_file = expand(s:gist_token_file)
+
 let s:system = function(get(g:, 'webapi#system_function', 'system'))
 
 if !exists('g:github_user')
@@ -884,7 +889,7 @@ function! s:GistGetAuthHeader() abort
 
   redraw
   echohl WarningMsg
-  echo 'Gist.vim requires authorization to use the GitHub API. These settings are stored in "~/.gist-vim". If you want to revoke, do "rm ~/.gist-vim".'
+  echo 'Gist.vim requires authorization to use the GitHub API. These settings are stored in "'.s:gist_token_file.'". If you want to revoke, do "rm '.s:gist_token_file . '".'
   echohl None
   let password = inputsecret('GitHub Password for '.g:github_user.':')
   if len(password) == 0
