@@ -34,9 +34,9 @@ let s:gist_token_file = expand(get(g:, 'gist_token_file', '~/.gist-vim'))
 let s:system = function(get(g:, 'webapi#system_function', 'system'))
 
 if !exists('g:github_user')
-  let g:github_user = substitute(s:system('git config --get github.user'), "\n", '', '')
+  let g:github_user = $GITHUB_USER
   if strlen(g:github_user) == 0
-    let g:github_user = $GITHUB_USER
+    let g:github_user = substitute(s:system('git config --get github.user'), "\n", '', '')
   end
 endif
 
